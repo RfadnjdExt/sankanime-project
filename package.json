@@ -20,7 +20,7 @@
     "artplayer": "^5.1.1",
     "axios": "^1.6.7",
     "clsx": "^2.1.0",
-    "firebase": "^10.8.0",
+    "firebase": "^12.1.0",
     "framer-motion": "^11.0.8",
     "hls.js": "^1.6.9",
     "lucide-react": "^0.383.0",
