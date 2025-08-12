@@ -6,7 +6,7 @@ import artplayerPluginChapter from "artplayer-plugin-chapter";
 
 import Skeleton from "../components/UI/Skeleton";
 import Voiceactor from "../components/Player/Voiceactor";
-import CategoryCard from "../components/UI/CategoryCard";
+import CategoryCard from "../components/Carousel/CategoryCard";
 import Loader from "../components/Loader";
 import Error from "./NotFound";
 import Episodelist from "../components/Player/Episodelist";
