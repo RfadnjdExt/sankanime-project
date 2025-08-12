@@ -1,0 +1,167 @@
+@import "https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap";
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    margin: 0;
+    padding: 0;
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #201f31;
+  }
+
+  body {
+    overflow-y: scroll;
+  }
+
+  ::-webkit-scrollbar {
+    width: 16px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #23222c;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #65646a;
+  }
+}
+
+@layer components {
+  .spotlight-overlay {
+    width: 100.1%;
+    height: 100.1%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        circle at 130% center,
+        #201f3100 50%,
+        #201f3180 60%,
+        #201f31,
+        #201f31
+      ),
+      linear-gradient(to top, #201f31, #201f3100 20%, #201f3100),
+      linear-gradient(to left, #201f31, #201f3100 20%, #201f3100),
+      linear-gradient(to bottom, #201f31, #201f3100 20%, #201f3100);
+    z-index: 1;
+  }
+
+  .bouncing-loading > div {
+    width: 18px;
+    height: 18px;
+    background-color: #858490;
+    border-radius: 100%;
+    display: inline-block;
+    animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  }
+  .bouncing-loading .span1 {
+    animation-delay: -0.32s;
+  }
+  .bouncing-loading .span2 {
+    animation-delay: -0.16s;
+  }
+
+  .shimmer-effect {
+    background: linear-gradient(
+      to right,
+      #ffffff1a,
+      #fff3,
+      #ffffff4d,
+      #fff3,
+      #ffffff1a,
+      #00000008
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite linear;
+  }
+
+  .art-subtitle-line,
+  .art-subtitle-line * {
+    font-family: Roboto, sans-serif !important;
+    font-size: 0.9rem !important;
+    font-weight: 650 !important;
+  }
+
+  .art-fullscreen .art-subtitle-line,
+  .art-fullscreen .art-subtitle-line * {
+    font-size: 1.6rem !important;
+  }
+
+  .donate-button {
+    position: relative;
+    overflow: hidden;
+    animation: donate-pulse 2s infinite;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+  }
+  .donate-button .heart-icon {
+    animation: heart-beat 1.5s ease-in-out infinite;
+    display: inline-block;
+  }
+}
+
+@keyframes sk-bouncedelay {
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 7px #ffbade;
+  }
+  50% {
+    box-shadow: 0 0 20px #ffbade;
+  }
+  100% {
+    box-shadow: 0 0 7px #ffbade;
+  }
+}
+
+@keyframes donate-pulse {
+  0% {
+    box-shadow: 0 0 #22c55eb3;
+  }
+  70% {
+    box-shadow: 0 0 0 15px #22c55e00;
+  }
+  100% {
+    box-shadow: 0 0 #22c55e00;
+  }
+}
+
+@keyframes heart-beat {
+  0%,
+  50%,
+  100% {
+    transform: scale(1);
+  }
+  25%,
+  75% {
+    transform: scale(1.05);
+  }
+}
