@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 
 import { getCategoryInfo } from "../api/animeApi";
@@ -20,8 +20,15 @@ import Topten from "../components/Carousel/Topten";
  * @param {string} props.label - Label yang akan ditampilkan sebagai judul halaman (misal: 'Top Airing').
  */
 function Category({ path, label }) {
+  const { genre } = useParams();
+  const displayLabel =
+    label ||
+    (genre
+      ? genre.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())
+      : "Category");
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+  const apiPath = path || `genre/${genre}`;
   const { homeInfo, homeInfoLoading } = useHomeInfo();
 
   const [animeList, setAnimeList] = useState(null);
@@ -36,7 +43,7 @@ function Category({ path, label }) {
       setIsLoading(true);
       setError(null);
       try {
-        const data = await getCategoryInfo(path, currentPage);
+        const result = await getCategoryInfo(apiPath, currentPage);
         if (data && data.data && data.data.length > 0) {
           setAnimeList(data.data);
           setTotalPages(data.totalPages);
@@ -53,7 +60,7 @@ function Category({ path, label }) {
 
     fetchCategoryData();
     window.scrollTo(0, 0);
-  }, [path, currentPage, navigate]);
+  }, [apiPath, currentPage, navigate]);
 
   const handlePageChange = (newPage) => {
     setSearchParams({ page: newPage });
@@ -75,9 +82,7 @@ function Category({ path, label }) {
     <div className="w-full px-4 mt-[100px] grid grid-cols-[minmax(0,75%),minmax(0,25%)] gap-x-6 max-[1200px]:flex max-[1200px]:flex-col">
       <div>
         <CategoryCard
-          label={label
-            .replace(/-/g, " ")
-            .replace(/\b\w/g, (l) => l.toUpperCase())}
+          label={displayLabel}
           data={animeList}
           showViewMore={false}
           className="mt-0"
@@ -106,8 +111,8 @@ function Category({ path, label }) {
 }
 
 Category.propTypes = {
-  path: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
+  path: PropTypes.string,
+  label: PropTypes.string,
 };
 
 export default Category;

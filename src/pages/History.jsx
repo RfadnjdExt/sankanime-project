@@ -53,8 +53,8 @@ function History() {
               JSON.stringify(localHistory)
             );
           }
-        } catch (error) {
-          console.error("Gagal mengambil history dari Firebase:", error);
+        } catch (e) {
+          console.error("Gagal mengambil history dari Firebase:", e);
         }
       }
 
@@ -108,8 +108,8 @@ function History() {
       try {
         const historyDocRef = doc(db, "history", user.uid);
         await setDoc(historyDocRef, { data: updatedHistory });
-      } catch (error) {
-        console.error("Gagal update Firebase saat hapus:", error);
+      } catch (e) {
+        console.error("Gagal update Firebase saat hapus:", e);
       }
     }
   };

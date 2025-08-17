@@ -60,8 +60,8 @@ const ContinueWatching = () => {
               JSON.stringify(mergedHistory)
             );
           }
-        } catch (error) {
-          console.error("Gagal ambil history dari Firebase:", error);
+        } catch (e) {
+          console.error("Gagal ambil history dari Firebase:", e);
         }
       }
 
@@ -122,8 +122,8 @@ const ContinueWatching = () => {
       try {
         const historyRef = doc(db, "history", user.uid);
         await setDoc(historyRef, { data: watchList });
-      } catch (error) {
-        console.error("[AutoSync] Gagal update Firebase:", error);
+      } catch (e) {
+        console.error("[AutoSync] Gagal update Firebase:", e);
       }
     };
     saveToFirebase();

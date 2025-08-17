@@ -8,7 +8,7 @@ import Skeleton from "../components/UI/Skeleton";
 import Voiceactor from "../components/Player/Voiceactor";
 import CategoryCard from "../components/Carousel/CategoryCard";
 import Loader from "../components/Loader";
-import Error from "./NotFound";
+import ErrorPage from "./NotFound";
 import Episodelist from "../components/Player/Episodelist";
 import Servers from "../components/Player/Servers";
 import WatchControls from "../components/Player/WatchControls.jsx";
@@ -46,6 +46,7 @@ function Watch() {
   const [activeEpisodeId, setActiveEpisodeId] = useState(null);
   const [activeServerId, setActiveServerId] = useState(null);
   const [activeServerType, setActiveServerType] = useState("sub");
+  const [activeServerName, setActiveServerName] = useState(null);
   const [loading, setLoading] = useState(true);
   const [streamLoading, setStreamLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -100,7 +101,7 @@ function Watch() {
     };
 
     fetchInitialData();
-  }, [id, navigate]);
+  }, [id, navigate, episodeIdFromUrl]);
 
   useEffect(() => {
     if (!activeEpisodeId) return;
@@ -109,6 +110,9 @@ function Watch() {
       setStreamLoading(true);
       hasFetchedStream.current = false;
       try {
+        console.log(
+          `Fetching servers for animeId: ${id}, episodeId: ${activeEpisodeId}`
+        );
         const serverData = await getServers(id, activeEpisodeId);
         if (!serverData?.length) throw new Error("No servers available");
         setServers(serverData);
@@ -121,8 +125,18 @@ function Watch() {
 
         setActiveServerId(defaultServer.data_id);
         setActiveServerType(defaultServer.type);
-      } catch (err) {
-        console.error("Error fetching servers:", err);
+        setActiveServerName(defaultServer.serverName);
+      } catch (e) {
+        console.error("Error fetching servers:", e);
+        if (e.message === "No servers available") {
+          setError(
+            "Tidak ada server streaming yang tersedia untuk episode ini. Silakan coba episode lain."
+          );
+        } else {
+          setError(
+            "Gagal memuat server streaming. Periksa koneksi internet Anda dan coba lagi."
+          );
+        }
         setError("Could not load streaming servers for this episode.");
       }
     };
@@ -148,8 +162,8 @@ function Watch() {
 
         setStreamInfo(streamData);
         hasFetchedStream.current = true;
-      } catch (err) {
-        console.error("Error fetching stream info:", err);
+      } catch (e) {
+        console.error("Error fetching stream info:", e);
         setError("Failed to get video stream. Please try another server.");
       } finally {
         setStreamLoading(false);
@@ -209,7 +223,7 @@ function Watch() {
   }, [activeEpisodeId, saveWatchHistory]);
 
   useEffect(() => {
-    if (!streamInfo || !artplayerRef.current) return;
+    if (!streamInfo || !artplayerRef.current || !animeInfo) return;
 
     const art = new Artplayer({
       container: artplayerRef.current,
@@ -327,14 +341,23 @@ function Watch() {
     return () => {
       art.destroy(false);
     };
-  }, [streamInfo]);
+  }, [
+    streamInfo,
+    animeInfo,
+    episodes,
+    activeEpisodeId,
+    autoPlay,
+    autoSkipIntro,
+    autoNext,
+    id,
+  ]);
 
   if (loading) {
     return <Loader type="animeInfo" />;
   }
 
   if (error) {
-    return <Error error={error} />;
+    return <ErrorPage error={error} />;
   }
 
   const activeEpisodeNum = episodes.find(
@@ -368,9 +391,11 @@ function Watch() {
               servers={servers}
               activeEpisodeNum={activeEpisodeNum}
               activeServerId={activeServerId}
+              activeServerName={activeServerName}
               activeServerType={activeServerType}
               setActiveServerId={setActiveServerId}
               setActiveServerType={setActiveServerType}
+              setActiveServerName={setActiveServerName}
               serverLoading={streamLoading}
             />
           </div>
@@ -380,8 +405,8 @@ function Watch() {
             isFullOverview={isFullOverview}
             setIsFullOverview={setIsFullOverview}
           />
-          <Voiceactor animeInfo={animeInfo} />
-          {animeInfo.related_data?.length > 0 && (
+          {animeInfo && <Voiceactor animeInfo={animeInfo} />}
+          {animeInfo?.related_data?.length > 0 && (
             <CategoryCard
               label="Related Anime"
               data={animeInfo.related_data}

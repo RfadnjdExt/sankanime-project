@@ -14,8 +14,8 @@ const handleApiRequest = async (apiCall, errorMessage) => {
   try {
     const response = await apiCall();
     return response.data?.results ?? response.data;
-  } catch (error) {
-    console.error(errorMessage, error);
+  } catch (e) {
+    console.error(errorMessage, e);
     throw error;
   }
 };
@@ -53,8 +53,8 @@ export const getHomeInfo = () => {
             return cached.data;
           }
         }
-      } catch (error) {
-        console.warn("Gagal mem-parse cache, mengambil data baru.", error);
+      } catch (e) {
+        console.warn("Gagal mem-parse cache, mengambil data baru.", e);
         localStorage.removeItem(CACHE_KEY);
       }
 

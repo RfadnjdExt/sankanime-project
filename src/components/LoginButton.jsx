@@ -50,8 +50,8 @@ const LoginButton = () => {
     } else {
       try {
         await signInWithPopup(auth, provider);
-      } catch (error) {
-        console.warn("Popup gagal, fallback ke redirect:", error);
+      } catch (e) {
+        console.warn("Popup gagal, fallback ke redirect:", e);
         try {
           await signInWithRedirect(auth, provider);
         } catch (redirectError) {

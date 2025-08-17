@@ -111,7 +111,7 @@ const Voiceactor = ({ animeInfo, className }) => {
 Voiceactor.propTypes = {
   className: PropTypes.string,
   animeInfo: PropTypes.shape({
-    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     charactersVoiceActors: PropTypes.arrayOf(
       PropTypes.shape({
         character: PropTypes.shape({
